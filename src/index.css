@@ -1,15 +1,19 @@
 :root {
-  --marron: #7a4a1e;
-  --marron-oscuro: #4a2e12;
-  --crema: #f4e3c1;
+  --fondo: #1b1e21;
+  --superficie: #23282b;
+  --superficie-alta: #2c3236;
+  --borde: #383f44;
+  --naranja: #f2952b;
+  --naranja-oscuro: #d9800f;
+  --plata: #d6d6d8;
+  --texto: #f5f5f5;
+  --texto-tenue: #a7adb2;
   --verde: #2f8f4e;
   --verde-oscuro: #1f6b38;
-  --rojo: #b23a2f;
-  --rojo-oscuro: #8a2c23;
-  --gris: #6b6b6b;
-  --fondo: #fdf8ef;
+  --rojo: #c0392b;
+  --rojo-oscuro: #932a1f;
 
-  color-scheme: light;
+  color-scheme: dark;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -26,7 +30,7 @@ body,
 body {
   margin: 0;
   background: var(--fondo);
-  color: var(--marron-oscuro);
+  color: var(--texto);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -46,7 +50,7 @@ button {
 
 .pantalla--centrada {
   justify-content: center;
-  gap: 32px;
+  gap: 28px;
 }
 
 .pantalla--resumen {
@@ -54,10 +58,18 @@ button {
   gap: 16px;
 }
 
+.logo-waco {
+  width: 96px;
+  height: 96px;
+  border-radius: 22px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
 .titulo {
   font-size: clamp(1.8rem, 6vw, 2.4rem);
   text-align: center;
   margin: 0;
+  color: var(--texto);
 }
 
 .titulo--resumen {
@@ -67,7 +79,7 @@ button {
 .subtitulo {
   font-size: 1.4rem;
   margin: 0 0 12px;
-  color: var(--marron);
+  color: var(--naranja);
 }
 
 .columna-botones {
@@ -85,7 +97,7 @@ button {
   font-weight: 700;
   border-radius: 20px;
   color: white;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   transition: transform 0.08s ease;
 }
 
@@ -94,7 +106,8 @@ button {
 }
 
 .boton-persona {
-  background: var(--marron);
+  background: linear-gradient(135deg, var(--naranja) 0%, var(--naranja-oscuro) 100%);
+  color: #1b1e21;
 }
 
 .boton-marcar {
@@ -126,7 +139,7 @@ button {
 
 .enlace-resumen {
   background: none;
-  color: var(--marron);
+  color: var(--naranja);
   font-size: 1.1rem;
   text-decoration: underline;
   padding: 12px;
@@ -135,56 +148,57 @@ button {
 .boton-volver {
   align-self: flex-start;
   background: none;
-  color: var(--marron);
+  color: var(--naranja);
   font-size: 1.1rem;
   padding: 10px 4px;
 }
 
 .boton-secundario {
-  background: var(--marron);
-  color: white;
+  background: var(--naranja);
+  color: #1b1e21;
   border-radius: 14px;
   padding: 14px 24px;
   font-size: 1.1rem;
+  font-weight: 600;
 }
 
 .texto-info {
   font-size: 1.1rem;
-  color: var(--gris);
+  color: var(--texto-tenue);
 }
 
 .texto-error {
   font-size: 1.1rem;
-  color: var(--rojo-oscuro);
+  color: #ff8a75;
   text-align: center;
 }
 
 .texto-confirmacion {
   font-size: 1.2rem;
   text-align: center;
-  color: var(--verde-oscuro);
+  color: #7fd99a;
 }
 
 /* Resumen */
 
 .tarjeta-persona {
-  background: white;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
   border-radius: 18px;
   padding: 18px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .etiqueta-seccion {
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--gris);
+  color: var(--texto-tenue);
   margin: 16px 0 8px;
 }
 
 .bloque-semanas {
-  border-bottom: 1px solid #eee0c8;
+  border-bottom: 1px solid var(--borde);
   padding-bottom: 8px;
 }
 
@@ -193,13 +207,19 @@ button {
   justify-content: space-between;
   padding: 6px 0;
   font-size: 1.05rem;
+  color: var(--texto);
+}
+
+.fila-semana strong {
+  color: var(--naranja);
 }
 
 .dia-detalle {
-  border: 1px solid #eee0c8;
+  border: 1px solid var(--borde);
   border-radius: 12px;
   margin-bottom: 10px;
   padding: 10px 14px;
+  background: var(--superficie-alta);
 }
 
 .dia-detalle summary {
@@ -209,6 +229,7 @@ button {
   cursor: pointer;
   font-weight: 600;
   list-style: none;
+  color: var(--texto);
 }
 
 .dia-detalle summary::-webkit-details-marker {
@@ -220,7 +241,7 @@ button {
 }
 
 .dia-total {
-  color: var(--marron);
+  color: var(--naranja);
 }
 
 .lista-pares {
@@ -236,8 +257,8 @@ button {
   display: flex;
   justify-content: space-between;
   font-size: 0.98rem;
-  color: var(--marron-oscuro);
-  border-top: 1px dashed #eee0c8;
+  color: var(--texto-tenue);
+  border-top: 1px dashed var(--borde);
   padding-top: 6px;
 }
 

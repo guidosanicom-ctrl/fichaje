@@ -1,4 +1,4 @@
--- Esquema para la app de fichajes de Carpintería Matu
+-- Esquema para la app de fichajes de WACO Muebles
 -- Ejecutar este script en el SQL Editor de Supabase (Project > SQL Editor > New query)
 
 create table if not exists fichajes (

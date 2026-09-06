@@ -6,6 +6,7 @@ export default function PersonSelect() {
 
   return (
     <div className="pantalla pantalla--centrada">
+      <img src="/waco-logo.png" alt="WACO Muebles" className="logo-waco" />
       <h1 className="titulo">¿Quién sos?</h1>
 
       <div className="columna-botones">

@@ -1,4 +1,4 @@
-# Fichajes - Carpintería Matu
+# Fichajes - WACO Muebles
 
 PWA simple para que Mateo y Franco marquen entrada/salida, y para que Pablo vea el resumen de horas trabajadas.
 
@@ -40,7 +40,7 @@ Abrí la URL que muestra la consola (ej. `http://localhost:5173`) desde el celul
 1. Subí este proyecto a un repo de GitHub.
 2. En https://vercel.com, "Add New Project" e importá el repo (framework detectado: Vite).
 3. En **Environment Variables** cargá `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` con los mismos valores de `.env.local`.
-4. Deploy. Vercel te da una URL tipo `https://carpineria-matu.vercel.app`.
+4. Deploy. Vercel te da una URL tipo `https://carpinteria-fichaje.vercel.app`.
 
 ## 5. Instalar como app en el celular
 
