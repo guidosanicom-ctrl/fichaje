@@ -6,6 +6,8 @@ import {
   formatDuracion,
   formatFechaLarga,
   formatHora,
+  PERSONA_STORAGE_KEY,
+  PERSONAS,
   totalesPorSemana,
 } from '../utils/fichajes'
 
@@ -14,6 +16,10 @@ export default function Resumen() {
   const [datos, setDatos] = useState(null)
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState(null)
+
+  const personaDelCelular = localStorage.getItem(PERSONA_STORAGE_KEY)
+  const esCelularDeUnaPersona = PERSONAS.includes(personaDelCelular)
+  const [verTodos, setVerTodos] = useState(!esCelularDeUnaPersona)
 
   useEffect(() => {
     cargar()
@@ -32,21 +38,32 @@ export default function Resumen() {
     }
   }
 
+  const entradas = datos
+    ? Object.entries(datos).filter(([persona]) => verTodos || persona === personaDelCelular)
+    : []
+
   return (
     <div className="pantalla pantalla--resumen">
       <button className="boton-volver" onClick={() => navigate('/')}>
         ← Volver
       </button>
 
-      <h1 className="titulo titulo--resumen">Resumen de horas</h1>
+      <h1 className="titulo titulo--resumen">
+        {verTodos || !esCelularDeUnaPersona ? 'Resumen de horas' : `Tus horas, ${personaDelCelular}`}
+      </h1>
 
       {cargando && <p className="texto-info">Cargando...</p>}
       {error && <p className="texto-error">{error}</p>}
 
-      {datos &&
-        Object.entries(datos).map(([persona, dias]) => (
-          <PersonaResumen key={persona} persona={persona} dias={dias} />
-        ))}
+      {esCelularDeUnaPersona && (
+        <button className="enlace-cambiar" onClick={() => setVerTodos(!verTodos)}>
+          {verTodos ? 'Ver solo mis horas' : 'Ver el resumen de todos (para Pablo)'}
+        </button>
+      )}
+
+      {entradas.map(([persona, dias]) => (
+        <PersonaResumen key={persona} persona={persona} dias={dias} />
+      ))}
     </div>
   )
 }
