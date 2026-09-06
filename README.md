@@ -49,15 +49,15 @@ Abrí la URL que muestra la consola (ej. `http://localhost:5173`) desde el celul
 
 ## Cómo funciona
 
-- **Pantalla de inicio (`/`)**: elegís "Mateo" o "Franco".
-- **Marcar (`/marcar/:persona`)**: un botón grande que dice "Marcar entrada" o "Marcar salida" según el último fichaje de esa persona. Al tocarlo, guarda el registro en Supabase con hora exacta.
-- **Resumen (`/resumen`)**: accesible desde un link en la pantalla de inicio, sin login. Muestra, por persona: total de horas por semana, y el detalle día por día con cada hora de entrada y salida.
+- **Pantalla de inicio (`/`)**: la primera vez que se abre en un celular, pide elegir "Mateo" o "Franco" y lo guarda en ese celular (`localStorage`). Las próximas veces salta directo a marcar, sin volver a preguntar — así se evita tocar por error el nombre del otro.
+- **Marcar (`/marcar/:persona`)**: un botón grande que dice "Marcar entrada" o "Marcar salida" según el último fichaje de esa persona. Al tocarlo, guarda el registro en Supabase con hora exacta. Si alguien fuerza la URL de otra persona en un celular ya asignado, la app lo redirige de vuelta a la persona guardada. Al pie hay un link chico "¿No sos vos? Cambiar de persona en este celular" con confirmación, para reasignar el equipo si hace falta (ej. se configuró mal la primera vez, o cambia de dueño).
+- **Resumen (`/resumen`)**: accesible desde un link, sin login. Muestra, por persona: total de horas por semana, y el detalle día por día con cada hora de entrada y salida.
 
 ## Notas de seguridad
 
-No hay autenticación de usuarios. La tabla `fichajes` tiene Row Level Security habilitado con políticas que:
+No hay autenticación de usuarios. La asignación de persona por celular (arriba) es solo para evitar errores por apuro, no es una barrera de seguridad real: alguien con conocimientos técnicos podría borrar el `localStorage` o editar la URL a mano. La tabla `fichajes` tiene Row Level Security habilitado con políticas que:
 - permiten **leer** todos los fichajes (para el resumen),
 - permiten **insertar** solo si `persona` es "Mateo" o "Franco" y `tipo` es "entrada" o "salida",
 - **no** permiten `update` ni `delete` desde el cliente (nadie puede borrar o alterar el historial por accidente).
 
-Esto es apropiado para un equipo chico y de confianza, pero cualquiera con el link puede marcar fichajes o ver el resumen — no hay control de quién marca qué desde el navegador.
+Esto es apropiado para un equipo chico y de confianza, pero cualquiera con el link puede marcar fichajes o ver el resumen.

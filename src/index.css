@@ -167,6 +167,44 @@ button {
   color: var(--texto-tenue);
 }
 
+.texto-info--centrado {
+  text-align: center;
+  max-width: 320px;
+}
+
+.enlace-cambiar {
+  background: none;
+  color: var(--texto-tenue);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.confirmar-cambio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  padding: 18px;
+  margin-top: 8px;
+}
+
+.fila-confirmar {
+  display: flex;
+  gap: 12px;
+}
+
+.boton-texto {
+  background: none;
+  color: var(--texto-tenue);
+  font-size: 1rem;
+  padding: 14px 18px;
+}
+
 .texto-error {
   font-size: 1.1rem;
   color: #ff8a75;

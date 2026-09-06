@@ -1,5 +1,8 @@
 export const PERSONAS = ['Mateo', 'Franco']
 
+// Clave para recordar, por celular, qué persona usa ese equipo
+export const PERSONA_STORAGE_KEY = 'waco_persona_dispositivo'
+
 const DIA_LABELS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
 const MES_LABELS = [
   'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',

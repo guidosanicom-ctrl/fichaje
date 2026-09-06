@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { obtenerUltimoFichaje, registrarFichaje } from '../lib/fichajesApi'
-import { formatHora, PERSONAS } from '../utils/fichajes'
+import { formatHora, PERSONA_STORAGE_KEY, PERSONAS } from '../utils/fichajes'
 
 export default function Marcar() {
   const { persona } = useParams()
@@ -12,11 +12,24 @@ export default function Marcar() {
   const [enviando, setEnviando] = useState(false)
   const [error, setError] = useState(null)
   const [confirmacion, setConfirmacion] = useState(null)
+  const [confirmandoCambio, setConfirmandoCambio] = useState(false)
 
   const personaValida = PERSONAS.includes(persona)
 
   useEffect(() => {
     if (!personaValida) return
+
+    // Este celular ya tiene otra persona asignada: no dejamos marcar para
+    // una distinta aunque alguien fuerce la URL a mano.
+    const guardada = localStorage.getItem(PERSONA_STORAGE_KEY)
+    if (guardada && guardada !== persona) {
+      navigate(`/marcar/${guardada}`, { replace: true })
+      return
+    }
+    if (!guardada) {
+      localStorage.setItem(PERSONA_STORAGE_KEY, persona)
+    }
+
     cargarEstado()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [persona])
@@ -49,6 +62,11 @@ export default function Marcar() {
     }
   }
 
+  function cambiarPersona() {
+    localStorage.removeItem(PERSONA_STORAGE_KEY)
+    navigate('/', { replace: true })
+  }
+
   if (!personaValida) {
     return (
       <div className="pantalla pantalla--centrada">
@@ -62,10 +80,6 @@ export default function Marcar() {
 
   return (
     <div className="pantalla pantalla--centrada">
-      <button className="boton-volver" onClick={() => navigate('/')}>
-        ← Volver
-      </button>
-
       <h1 className="titulo">Hola, {persona}</h1>
 
       {cargando && <p className="texto-info">Cargando...</p>}
@@ -102,6 +116,30 @@ export default function Marcar() {
             Reintentar
           </button>
         </>
+      )}
+
+      <button className="enlace-resumen" onClick={() => navigate('/resumen')}>
+        Ver resumen de horas
+      </button>
+
+      {!confirmandoCambio ? (
+        <button className="enlace-cambiar" onClick={() => setConfirmandoCambio(true)}>
+          ¿No sos {persona}? Cambiar de persona en este celular
+        </button>
+      ) : (
+        <div className="confirmar-cambio">
+          <p className="texto-info texto-info--centrado">
+            Este celular va a dejar de estar asignado a {persona}.
+          </p>
+          <div className="fila-confirmar">
+            <button className="boton-secundario" onClick={cambiarPersona}>
+              Sí, cambiar
+            </button>
+            <button className="boton-texto" onClick={() => setConfirmandoCambio(false)}>
+              Cancelar
+            </button>
+          </div>
+        </div>
       )}
     </div>
   )
