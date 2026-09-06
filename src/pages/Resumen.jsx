@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { obtenerTodosLosFichajes } from '../lib/fichajesApi'
 import {
   agruparPorPersonaYDia,
+  claveDia,
   formatDuracion,
+  formatFechaCorta,
   formatFechaLarga,
   formatHora,
   PERSONA_STORAGE_KEY,
@@ -88,12 +90,19 @@ function PersonaResumen({ persona, dias }) {
 
       <div className="bloque-semanas">
         <h3 className="etiqueta-seccion">Totales por semana</h3>
-        {clavesSemanas.map((clave) => (
-          <div className="fila-semana" key={clave}>
-            <span>Semana del {formatFechaLarga(semanas[clave].inicio)}</span>
-            <strong>{formatDuracion(semanas[clave].totalMs)}</strong>
-          </div>
-        ))}
+        {clavesSemanas.map((clave) => {
+          const { inicio, fin, totalMs } = semanas[clave]
+          const mismoDia = claveDia(inicio) === claveDia(fin)
+          const rango = mismoDia
+            ? formatFechaCorta(inicio)
+            : `${formatFechaCorta(inicio)} al ${formatFechaCorta(fin)}`
+          return (
+            <div className="fila-semana" key={clave}>
+              <span>Semana del {rango}</span>
+              <strong>{formatDuracion(totalMs)}</strong>
+            </div>
+          )
+        })}
       </div>
 
       <div className="bloque-dias">

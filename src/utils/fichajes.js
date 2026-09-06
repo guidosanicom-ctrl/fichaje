@@ -19,6 +19,12 @@ export function formatFechaLarga(fecha) {
   return `${dia} ${fecha.getDate()} de ${mes}`
 }
 
+// Sin nombre del día, para rangos: "7 de septiembre"
+export function formatFechaCorta(fecha) {
+  const mes = MES_LABELS[fecha.getMonth()]
+  return `${fecha.getDate()} de ${mes}`
+}
+
 // Clave de día en horario local, ej "2026-09-06"
 export function claveDia(fecha) {
   const y = fecha.getFullYear()
@@ -95,6 +101,8 @@ export function agruparPorPersonaYDia(fichajes) {
   return porPersona
 }
 
+// inicio siempre es el lunes de esa semana; fin es el último día con
+// fichajes esa semana (normalmente viernes, sábado si tocó trabajar ese día).
 export function totalesPorSemana(dias) {
   const semanas = {}
   for (const clave of Object.keys(dias)) {
@@ -102,8 +110,9 @@ export function totalesPorSemana(dias) {
     const claveSem = claveSemana(dia.fecha)
     if (!semanas[claveSem]) {
       const [y, m, d] = claveSem.split('-').map(Number)
-      semanas[claveSem] = { inicio: new Date(y, m - 1, d), totalMs: 0 }
+      semanas[claveSem] = { inicio: new Date(y, m - 1, d), fin: dia.fecha, totalMs: 0 }
     }
+    if (dia.fecha > semanas[claveSem].fin) semanas[claveSem].fin = dia.fecha
     semanas[claveSem].totalMs += dia.totalMs
   }
   return semanas
