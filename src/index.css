@@ -1,0 +1,255 @@
+:root {
+  --marron: #7a4a1e;
+  --marron-oscuro: #4a2e12;
+  --crema: #f4e3c1;
+  --verde: #2f8f4e;
+  --verde-oscuro: #1f6b38;
+  --rojo: #b23a2f;
+  --rojo-oscuro: #8a2c23;
+  --gris: #6b6b6b;
+  --fondo: #fdf8ef;
+
+  color-scheme: light;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--marron-oscuro);
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+.pantalla {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+}
+
+.pantalla--centrada {
+  justify-content: center;
+  gap: 32px;
+}
+
+.pantalla--resumen {
+  align-items: stretch;
+  gap: 16px;
+}
+
+.titulo {
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  text-align: center;
+  margin: 0;
+}
+
+.titulo--resumen {
+  margin-top: 8px;
+}
+
+.subtitulo {
+  font-size: 1.4rem;
+  margin: 0 0 12px;
+  color: var(--marron);
+}
+
+.columna-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.boton-grande {
+  width: 100%;
+  min-height: 96px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.08s ease;
+}
+
+.boton-grande:active {
+  transform: scale(0.97);
+}
+
+.boton-persona {
+  background: var(--marron);
+}
+
+.boton-marcar {
+  min-height: 220px;
+  width: min(90vw, 420px);
+  border-radius: 28px;
+  font-size: 2rem;
+}
+
+.boton-marcar--entrada {
+  background: var(--verde);
+}
+
+.boton-marcar--entrada:active {
+  background: var(--verde-oscuro);
+}
+
+.boton-marcar--salida {
+  background: var(--rojo);
+}
+
+.boton-marcar--salida:active {
+  background: var(--rojo-oscuro);
+}
+
+.boton-marcar:disabled {
+  opacity: 0.7;
+}
+
+.enlace-resumen {
+  background: none;
+  color: var(--marron);
+  font-size: 1.1rem;
+  text-decoration: underline;
+  padding: 12px;
+}
+
+.boton-volver {
+  align-self: flex-start;
+  background: none;
+  color: var(--marron);
+  font-size: 1.1rem;
+  padding: 10px 4px;
+}
+
+.boton-secundario {
+  background: var(--marron);
+  color: white;
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-size: 1.1rem;
+}
+
+.texto-info {
+  font-size: 1.1rem;
+  color: var(--gris);
+}
+
+.texto-error {
+  font-size: 1.1rem;
+  color: var(--rojo-oscuro);
+  text-align: center;
+}
+
+.texto-confirmacion {
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--verde-oscuro);
+}
+
+/* Resumen */
+
+.tarjeta-persona {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.etiqueta-seccion {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gris);
+  margin: 16px 0 8px;
+}
+
+.bloque-semanas {
+  border-bottom: 1px solid #eee0c8;
+  padding-bottom: 8px;
+}
+
+.fila-semana {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 1.05rem;
+}
+
+.dia-detalle {
+  border: 1px solid #eee0c8;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+}
+
+.dia-detalle summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.dia-detalle summary::-webkit-details-marker {
+  display: none;
+}
+
+.dia-fecha::first-letter {
+  text-transform: uppercase;
+}
+
+.dia-total {
+  color: var(--marron);
+}
+
+.lista-pares {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fila-par {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.98rem;
+  color: var(--marron-oscuro);
+  border-top: 1px dashed #eee0c8;
+  padding-top: 6px;
+}
+
+.fila-par:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+@media (min-width: 640px) {
+  .pantalla--resumen {
+    max-width: 640px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
