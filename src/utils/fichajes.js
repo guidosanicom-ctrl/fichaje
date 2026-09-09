@@ -9,35 +9,53 @@ const MES_LABELS = [
   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
 ]
 
-export function formatHora(fecha) {
-  return fecha.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })
+// Argentina está siempre en UTC-3, sin horario de verano. Mostramos y
+// agrupamos todo en ese horario fijo en vez de confiar en el huso horario
+// que tenga configurado cada celular (si un celular está mal configurado,
+// antes se veían las horas corridas).
+const OFFSET_ARGENTINA_MS = 3 * 60 * 60 * 1000
+
+// Convierte un instante real (timestamp del fichaje) a un Date "espejo"
+// cuyos valores UTC representan directamente la hora de pared en Argentina.
+// Las funciones de abajo que reciben "fechaArg" esperan ya haber pasado por
+// esta conversión (agruparPorPersonaYDia la hace una sola vez por fichaje).
+function aHorarioArgentina(fechaReal) {
+  return new Date(fechaReal.getTime() - OFFSET_ARGENTINA_MS)
 }
 
-export function formatFechaLarga(fecha) {
-  const dia = DIA_LABELS[fecha.getDay()]
-  const mes = MES_LABELS[fecha.getMonth()]
-  return `${dia} ${fecha.getDate()} de ${mes}`
+export function formatHora(fechaReal) {
+  return aHorarioArgentina(fechaReal).toLocaleTimeString('es-AR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'UTC',
+  })
+}
+
+export function formatFechaLarga(fechaArg) {
+  const dia = DIA_LABELS[fechaArg.getUTCDay()]
+  const mes = MES_LABELS[fechaArg.getUTCMonth()]
+  return `${dia} ${fechaArg.getUTCDate()} de ${mes}`
 }
 
 // Sin nombre del día, para rangos: "7 de septiembre"
-export function formatFechaCorta(fecha) {
-  const mes = MES_LABELS[fecha.getMonth()]
-  return `${fecha.getDate()} de ${mes}`
+export function formatFechaCorta(fechaArg) {
+  const mes = MES_LABELS[fechaArg.getUTCMonth()]
+  return `${fechaArg.getUTCDate()} de ${mes}`
 }
 
-// Clave de día en horario local, ej "2026-09-06"
-export function claveDia(fecha) {
-  const y = fecha.getFullYear()
-  const m = String(fecha.getMonth() + 1).padStart(2, '0')
-  const d = String(fecha.getDate()).padStart(2, '0')
+// Clave de día en horario argentino, ej "2026-09-06"
+export function claveDia(fechaArg) {
+  const y = fechaArg.getUTCFullYear()
+  const m = String(fechaArg.getUTCMonth() + 1).padStart(2, '0')
+  const d = String(fechaArg.getUTCDate()).padStart(2, '0')
   return `${y}-${m}-${d}`
 }
 
-// Lunes de la semana ISO a la que pertenece la fecha, como clave de día
-export function claveSemana(fecha) {
-  const d = new Date(fecha)
-  const diaSemana = (d.getDay() + 6) % 7 // 0 = lunes ... 6 = domingo
-  d.setDate(d.getDate() - diaSemana)
+// Lunes de la semana a la que pertenece la fecha, como clave de día
+export function claveSemana(fechaArg) {
+  const d = new Date(fechaArg)
+  const diaSemana = (d.getUTCDay() + 6) % 7 // 0 = lunes ... 6 = domingo
+  d.setUTCDate(d.getUTCDate() - diaSemana)
   return claveDia(d)
 }
 
@@ -49,15 +67,16 @@ export function formatDuracion(ms) {
   return `${horas}h ${String(min).padStart(2, '0')}m`
 }
 
-// Agrupa fichajes (ya ordenados por persona) en pares entrada/salida por día.
-// Devuelve: { [persona]: { [claveDia]: { fecha, pares: [{entrada, salida, abierto}], totalMs } } }
+// Agrupa fichajes (ya ordenados por persona) en pares entrada/salida por día,
+// siempre en horario argentino. Devuelve:
+// { [persona]: { [claveDia]: { fecha, pares: [{entrada, salida, abierto}], totalMs } } }
 export function agruparPorPersonaYDia(fichajes) {
   const porPersona = {}
 
   for (const persona of PERSONAS) {
     const propios = fichajes
       .filter((f) => f.persona === persona)
-      .map((f) => ({ ...f, fecha: new Date(f.timestamp) }))
+      .map((f) => ({ ...f, fecha: aHorarioArgentina(new Date(f.timestamp)) }))
       .sort((a, b) => a.fecha - b.fecha)
 
     const dias = {}
@@ -110,7 +129,7 @@ export function totalesPorSemana(dias) {
     const claveSem = claveSemana(dia.fecha)
     if (!semanas[claveSem]) {
       const [y, m, d] = claveSem.split('-').map(Number)
-      semanas[claveSem] = { inicio: new Date(y, m - 1, d), fin: dia.fecha, totalMs: 0 }
+      semanas[claveSem] = { inicio: new Date(Date.UTC(y, m - 1, d)), fin: dia.fecha, totalMs: 0 }
     }
     if (dia.fecha > semanas[claveSem].fin) semanas[claveSem].fin = dia.fecha
     semanas[claveSem].totalMs += dia.totalMs

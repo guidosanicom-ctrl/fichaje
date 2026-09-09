@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "fichajes-dev",
-      "runtimeExecutable": "dev.bat",
+      "runtimeExecutable": "D:\\Carpineria matu\\dev.bat",
       "runtimeArgs": [],
       "port": 5173
     }
